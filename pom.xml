@@ -9,7 +9,7 @@
 
     <groupId>com.github.born2snipe</groupId>
     <artifactId>cli-progress</artifactId>
-    <version>0.1</version>
+    <version>0.2-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>cli-progress</name>
