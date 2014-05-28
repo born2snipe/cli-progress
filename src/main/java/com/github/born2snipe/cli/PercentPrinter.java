@@ -15,12 +15,12 @@ package com.github.born2snipe.cli;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class ProgressPrinter {
+public class PercentPrinter {
     private final int total;
     private final AtomicInteger current = new AtomicInteger(0);
     private int lengthOfLastNumber = 0;
 
-    public ProgressPrinter(int total) {
+    public PercentPrinter(int total) {
         this.total = total;
     }
 
