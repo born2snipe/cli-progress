@@ -13,40 +13,35 @@
  */
 package com.github.born2snipe.cli;
 
+import java.io.PrintStream;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class PercentPrinter {
     private final int total;
     private final AtomicInteger current = new AtomicInteger(0);
-    private int lengthOfLastNumber = 0;
+    private final Printer printer;
 
     public PercentPrinter(int total) {
+        this(total, System.out);
+    }
+
+    public PercentPrinter(int total, PrintStream printStream) {
         this.total = total;
+        this.printer = new Printer(printStream);
     }
 
     public void step() {
         synchronized (current) {
-            if (lengthOfLastNumber > 0) {
-                clear();
-            }
-            current.incrementAndGet();
-            int percentage = (int) ((((double) current.get()) / (double) total) * 100.0);
+            printer.clearAll();
 
-            System.out.print(percentage + "%");
+            current.incrementAndGet();
+            int percentage = (int) Math.round(((((double) current.get()) / (double) total) * 100.0));
+
+            printer.print(percentage + "%");
 
             if (percentage == 100) {
-                System.out.println();
+                printer.println();
             }
-
-            lengthOfLastNumber = String.valueOf(percentage).length();
-        }
-    }
-
-    private void clear() {
-        // clear percent sign
-        System.out.print("\b");
-        for (int i = 0; i < lengthOfLastNumber; i++) {
-            System.out.print("\b");
         }
     }
 }
