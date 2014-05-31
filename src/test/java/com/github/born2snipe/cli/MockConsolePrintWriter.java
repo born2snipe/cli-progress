@@ -18,6 +18,7 @@ import java.io.PrintStream;
 
 public class MockConsolePrintWriter extends PrintStream {
     private String output = "";
+    private int numberLineEndings;
 
     public MockConsolePrintWriter() {
         super(new ByteArrayOutputStream());
@@ -30,10 +31,16 @@ public class MockConsolePrintWriter extends PrintStream {
                 case '\b':
                     output = output.substring(0, output.length() - 1);
                     break;
+                case '\n':
+                    numberLineEndings++;
                 default:
                     output += c;
             }
         }
+    }
+
+    public int getNumberLineEndings() {
+        return numberLineEndings;
     }
 
     public String getOutput() {

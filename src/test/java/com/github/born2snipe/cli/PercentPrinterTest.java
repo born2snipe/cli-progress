@@ -13,16 +13,32 @@
  */
 package com.github.born2snipe.cli;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
 public class PercentPrinterTest {
+    private MockConsolePrintWriter mockConsolePrintWriter;
+    private PercentPrinter percentPrinter;
+
+    @Before
+    public void setUp() throws Exception {
+        mockConsolePrintWriter = new MockConsolePrintWriter();
+        percentPrinter = new PercentPrinter(100, mockConsolePrintWriter);
+    }
+
+    @Test
+    public void shouldOnlyPrintANewLineWhenWeHaveReachedTheEnd() {
+        percentPrinter = new PercentPrinter(1545, mockConsolePrintWriter);
+        for (int i = 0; i < 1545; i++) {
+            percentPrinter.step();
+        }
+        assertEquals(1, mockConsolePrintWriter.getNumberLineEndings());
+    }
+
     @Test
     public void shouldPrintThePercentComplete() {
-        MockConsolePrintWriter mockConsolePrintWriter = new MockConsolePrintWriter();
-        PercentPrinter percentPrinter = new PercentPrinter(100, mockConsolePrintWriter);
-
         for (int i = 0; i < 99; i++) {
             percentPrinter.step();
             assertEquals((i + 1) + "%", mockConsolePrintWriter.getOutput());
@@ -30,5 +46,15 @@ public class PercentPrinterTest {
 
         percentPrinter.step();
         assertEquals("100%" + System.getProperty("line.separator"), mockConsolePrintWriter.getOutput());
+    }
+
+    @Test
+    public void shouldNotPrintAnythingIfWeAttemptToStepPastTheEnd() {
+        for (int i = 0; i < 100; i++) {
+            percentPrinter.step();
+        }
+
+        percentPrinter.step();
+        assertEquals("100%\n", mockConsolePrintWriter.getOutput());
     }
 }

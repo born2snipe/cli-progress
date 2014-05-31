@@ -15,22 +15,29 @@ package com.github.born2snipe.cli;
 
 import java.io.PrintStream;
 
-public class PercentPrinter extends ProgressPrinter {
-    public PercentPrinter(int total) {
+public class CountUpToTotalPrinter extends ProgressPrinter {
+    private String messageFormat = "{count} of {total}";
+
+    public CountUpToTotalPrinter(int total) {
         this(total, System.out);
     }
 
-    public PercentPrinter(int total, PrintStream printStream) {
+    public CountUpToTotalPrinter(int total, PrintStream printStream) {
         super(total, new Printer(printStream));
     }
 
-    public PercentPrinter(int total, Printer printer) {
+    public CountUpToTotalPrinter(int total, Printer printer) {
         super(total, printer);
     }
 
     @Override
     protected void processStep(int currentStep) {
-        int percentage = (int) Math.round(((((double) currentStep) / (double) total) * 100.0));
-        printer.print(percentage + "%");
+        String message = messageFormat.replace("{count}", String.valueOf(currentStep));
+        message = message.replace("{total}", String.valueOf(total));
+        printer.print(message);
+    }
+
+    public void setMessageFormat(String messageFormat) {
+        this.messageFormat = messageFormat;
     }
 }
