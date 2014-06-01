@@ -47,6 +47,10 @@ public class MultipleProgressPrinter extends ProgressPrinter {
         progressPrinters.add(printer);
     }
 
+    public void showElapsedTime() {
+        progressPrinters.add(new ElapsedTimePrinter(total, printer));
+    }
+
     private boolean isNotLastPrinter(int index) {
         return index < progressPrinters.size() - 1;
     }
