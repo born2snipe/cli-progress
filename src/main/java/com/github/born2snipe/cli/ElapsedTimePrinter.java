@@ -16,7 +16,6 @@ package com.github.born2snipe.cli;
 import java.io.PrintStream;
 
 public class ElapsedTimePrinter extends ProgressPrinter {
-    private final Object lock = new Object();
     private Long start;
 
     public ElapsedTimePrinter(int total) {
@@ -33,13 +32,11 @@ public class ElapsedTimePrinter extends ProgressPrinter {
 
     @Override
     protected void processStep(int currentStep) {
-        synchronized (lock) {
-            initializeStartAsNeeded();
+        initializeStartAsNeeded();
 
-            long elapsed = System.currentTimeMillis() - start;
+        long elapsed = System.currentTimeMillis() - start;
 
-            printer.print("Elapsed: " + ElapsedTimeFormatter.formatMillis(elapsed));
-        }
+        printer.print("Elapsed: " + ElapsedTimeFormatter.formatMillis(elapsed));
     }
 
     private void initializeStartAsNeeded() {
