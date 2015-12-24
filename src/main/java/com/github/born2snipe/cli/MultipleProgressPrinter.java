@@ -18,6 +18,7 @@ import java.util.ArrayList;
 
 public class MultipleProgressPrinter extends ProgressPrinter {
     private ArrayList<ProgressPrinter> progressPrinters = new ArrayList<ProgressPrinter>();
+    private String separator = ", ";
 
     public MultipleProgressPrinter(int total, PrintStream printStream) {
         super(total, new Printer(printStream));
@@ -28,30 +29,47 @@ public class MultipleProgressPrinter extends ProgressPrinter {
         for (int i = 0; i < progressPrinters.size(); i++) {
             progressPrinters.get(i).processStep(currentStep);
             if (isNotLastPrinter(i)) {
-                printer.print(", ");
+                printer.print(separator);
             }
         }
     }
 
-    public void showPercentageComplete() {
-        progressPrinters.add(new PercentPrinter(total, printer));
+    public PercentPrinter showPercentageComplete() {
+        PercentPrinter percentPrinter = new PercentPrinter(total, printer);
+        progressPrinters.add(percentPrinter);
+        return percentPrinter;
     }
 
-    public void showCurrentPositionOfTotal() {
-        progressPrinters.add(new CountUpToTotalPrinter(total, printer));
-    }
-
-    public void showCurrentPositionOfTotal(String customMessageFormat) {
+    public CountUpToTotalPrinter showCurrentPositionOfTotal() {
         CountUpToTotalPrinter printer = new CountUpToTotalPrinter(total, this.printer);
-        printer.setMessageFormat(customMessageFormat);
         progressPrinters.add(printer);
+        return printer;
     }
 
-    public void showElapsedTime() {
-        progressPrinters.add(new ElapsedTimePrinter(total, printer));
+    public CountUpToTotalPrinter showCurrentPositionOfTotal(String customMessageFormat) {
+        CountUpToTotalPrinter countUpToTotalPrinter = new CountUpToTotalPrinter(total, this.printer);
+        countUpToTotalPrinter.setMessageFormat(customMessageFormat);
+        progressPrinters.add(countUpToTotalPrinter);
+        return countUpToTotalPrinter;
+    }
+
+    public ElapsedTimePrinter showElapsedTime() {
+        ElapsedTimePrinter elapsedTimePrinter = new ElapsedTimePrinter(total, printer);
+        progressPrinters.add(elapsedTimePrinter);
+        return elapsedTimePrinter;
     }
 
     private boolean isNotLastPrinter(int index) {
         return index < progressPrinters.size() - 1;
+    }
+
+    public ProgressBarPrinter showProgressBar() {
+        ProgressBarPrinter progressBarPrinter = new ProgressBarPrinter(total, printer);
+        progressPrinters.add(progressBarPrinter);
+        return progressBarPrinter;
+    }
+
+    public void setSeparator(String separator) {
+        this.separator = separator;
     }
 }

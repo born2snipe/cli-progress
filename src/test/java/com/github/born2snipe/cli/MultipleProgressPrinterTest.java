@@ -29,6 +29,17 @@ public class MultipleProgressPrinterTest {
     }
 
     @Test
+    public void shouldAllowConfiguringTheSeparatingCharacter() {
+        printer.setSeparator(" ");
+
+        printer.showCurrentPositionOfTotal();
+        printer.showPercentageComplete();
+        printer.step();
+
+        assertEquals("1 of 100 1%", mockPrintWriter.getOutput());
+    }
+
+    @Test
     public void shouldAllowSettingACustomMessageFormatForTheCurrentPositionPrinting() {
         printer.showCurrentPositionOfTotal("Processing {count}-{total}...");
         printer.step();
