@@ -30,6 +30,14 @@ public class CountUpToTotalPrinterTest {
     }
 
     @Test
+    public void shouldAllowPrintingALineOfTextAndReprintingTheProgress() {
+        printer.step();
+        printer.println("message");
+
+        assertEquals("message\n1 of 10", mockConsolePrintWriter.getOutput());
+    }
+
+    @Test
     public void shouldAllowSettingACustomMessageFormat() {
         printer.setMessageFormat("Processing {count}/{total} records");
 

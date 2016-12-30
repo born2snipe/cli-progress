@@ -29,6 +29,13 @@ public class PrinterTest {
     }
 
     @Test
+    public void shouldAllowPrintingTextWithNewLines() {
+        printer.println("test");
+
+        assertEquals("test" + System.getProperty("line.separator"), mockConsolePrintWriter.getOutput());
+    }
+
+    @Test
     public void shouldAllowPrintingNewLines() {
         printer.println();
 

@@ -23,6 +23,11 @@ public class Printer {
         this.printStream = printStream;
     }
 
+    public synchronized void println(String text) {
+        print(text);
+        println();
+    }
+
     public synchronized void print(String textToPrint) {
         printStream.print(textToPrint);
         printStream.flush();

@@ -29,6 +29,17 @@ public class MultipleProgressPrinterTest {
     }
 
     @Test
+    public void shouldAllowPrintingALineOfTextAndReprintingTheProgress() {
+        printer.showCurrentPositionOfTotal();
+        printer.showPercentageComplete();
+
+        printer.step();
+        printer.println("message");
+
+        assertEquals("message\n1 of 100, 1%", mockPrintWriter.getOutput());
+    }
+
+    @Test
     public void shouldAllowConfiguringTheSeparatingCharacter() {
         printer.setSeparator(" ");
 

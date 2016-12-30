@@ -20,15 +20,24 @@ import static org.junit.Assert.assertEquals;
 
 public class ProgressBarPrinterTest {
     private MockConsolePrintWriter mockConsolePrintWriter;
+    private ProgressBarPrinter printer;
 
     @Before
     public void setUp() throws Exception {
         mockConsolePrintWriter = new MockConsolePrintWriter();
+        printer = newPrinter(10);
+    }
+
+    @Test
+    public void shouldAllowPrintingALineOfTextAndReprintingTheProgress() {
+        printer.step();
+        printer.println("message");
+
+        assertEquals("message\n[#         ]", mockConsolePrintWriter.getOutput());
     }
 
     @Test
     public void shouldAllowTheEmptyCharacterToBeConfigurable() {
-        ProgressBarPrinter printer = newPrinter(10);
         printer.setEmptyCharacter(".");
         printer.step();
 
@@ -37,7 +46,6 @@ public class ProgressBarPrinterTest {
 
     @Test
     public void shouldAllowTheBarCharacterToBeConfigurable() {
-        ProgressBarPrinter printer = newPrinter(10);
         printer.setBarCharacter("*");
         printer.step();
 
@@ -46,7 +54,6 @@ public class ProgressBarPrinterTest {
 
     @Test
     public void shouldAllowMakingTheBarSizeConfigurable() {
-        ProgressBarPrinter printer = newPrinter(100);
         printer.setBarSize(5);
 
         printer.step(100);
@@ -56,15 +63,12 @@ public class ProgressBarPrinterTest {
 
     @Test
     public void shouldAllowATotalSizeWayBiggerThan10() {
-        ProgressBarPrinter printer = newPrinter(100);
         printer.step(100);
         assertOutput("[##########]\n");
     }
 
     @Test
     public void shouldAllowTheProgressBarToBeCompleted() {
-        ProgressBarPrinter printer = newPrinter(10);
-
         printer.step(10);
 
         assertOutput("[##########]\n");
@@ -72,8 +76,6 @@ public class ProgressBarPrinterTest {
 
     @Test
     public void shouldAllowDisplayingAProgressBar() {
-        ProgressBarPrinter printer = newPrinter(10);
-
         printer.step(1);
 
         assertOutput("[#         ]");
@@ -81,8 +83,6 @@ public class ProgressBarPrinterTest {
 
     @Test
     public void shouldNotDisplayAnythingUntilProgressIsMade() {
-        ProgressBarPrinter printer = newPrinter(10);
-
         printer.step(0);
 
         assertOutput("");

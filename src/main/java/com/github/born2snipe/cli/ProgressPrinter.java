@@ -45,5 +45,13 @@ public abstract class ProgressPrinter {
         }
     }
 
+    public void println(String message) {
+        synchronized (current) {
+            printer.clearAll();
+            printer.println(message);
+            processStep(current.get());
+        }
+    }
+
     protected abstract void processStep(int currentStep);
 }

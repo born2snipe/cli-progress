@@ -20,19 +20,27 @@ import static org.junit.Assert.assertEquals;
 
 public class PercentPrinterTest {
     private MockConsolePrintWriter mockConsolePrintWriter;
-    private PercentPrinter percentPrinter;
+    private PercentPrinter printer;
 
     @Before
     public void setUp() throws Exception {
         mockConsolePrintWriter = new MockConsolePrintWriter();
-        percentPrinter = new PercentPrinter(100, mockConsolePrintWriter);
+        printer = new PercentPrinter(100, mockConsolePrintWriter);
+    }
+
+    @Test
+    public void shouldAllowPrintingALineOfTextAndReprintingTheProgress() {
+        printer.step();
+        printer.println("message");
+
+        assertEquals("message\n1%", mockConsolePrintWriter.getOutput());
     }
 
     @Test
     public void shouldOnlyPrintANewLineWhenWeHaveReachedTheEnd() {
-        percentPrinter = new PercentPrinter(1545, mockConsolePrintWriter);
+        printer = new PercentPrinter(1545, mockConsolePrintWriter);
         for (int i = 0; i < 1545; i++) {
-            percentPrinter.step();
+            printer.step();
         }
         assertEquals(1, mockConsolePrintWriter.getNumberLineEndings());
     }
@@ -40,21 +48,21 @@ public class PercentPrinterTest {
     @Test
     public void shouldPrintThePercentComplete() {
         for (int i = 0; i < 99; i++) {
-            percentPrinter.step();
+            printer.step();
             assertEquals((i + 1) + "%", mockConsolePrintWriter.getOutput());
         }
 
-        percentPrinter.step();
+        printer.step();
         assertEquals("100%" + System.getProperty("line.separator"), mockConsolePrintWriter.getOutput());
     }
 
     @Test
     public void shouldNotPrintAnythingIfWeAttemptToStepPastTheEnd() {
         for (int i = 0; i < 100; i++) {
-            percentPrinter.step();
+            printer.step();
         }
 
-        percentPrinter.step();
+        printer.step();
         assertEquals("100%\n", mockConsolePrintWriter.getOutput());
     }
 }
