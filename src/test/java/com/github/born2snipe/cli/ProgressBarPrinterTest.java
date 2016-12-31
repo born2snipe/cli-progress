@@ -33,7 +33,7 @@ public class ProgressBarPrinterTest {
         printer.step();
         printer.println("message");
 
-        assertEquals("message\n[#         ]", mockConsolePrintWriter.getOutput());
+        assertEquals("message     \n[#         ]", mockConsolePrintWriter.getOutput());
     }
 
     @Test

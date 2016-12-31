@@ -48,7 +48,7 @@ public class PrinterTest {
         printer.clearAll();
         printer.clearAll();
 
-        assertEquals("", mockConsolePrintWriter.getOutput());
+        assertEquals("    ", mockConsolePrintWriter.getOutput());
     }
 
     @Test
@@ -61,7 +61,7 @@ public class PrinterTest {
         printer.print("1234");
         printer.clear(2);
 
-        assertEquals("12", mockConsolePrintWriter.getOutput());
+        assertEquals("12  ", mockConsolePrintWriter.getOutput());
     }
 
     @Test
@@ -69,6 +69,14 @@ public class PrinterTest {
         printer.print("1234");
         printer.clearAll();
 
-        assertEquals("", mockConsolePrintWriter.getOutput());
+        assertEquals("    ", mockConsolePrintWriter.getOutput());
+    }
+
+    @Test
+    public void x() {
+        printer.println("test");
+        printer.print("12");
+
+        assertEquals("test\n12", mockConsolePrintWriter.getOutput());
     }
 }

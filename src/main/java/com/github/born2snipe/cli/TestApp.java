@@ -29,6 +29,7 @@ public class TestApp {
 
     private static void executePrinter(ProgressPrinter printer) {
         for (int i = 0; i < STEP_COUNT; i++) {
+            printer.println("Message #" + (i + 1));
             printer.step();
             pause();
         }
@@ -36,7 +37,7 @@ public class TestApp {
 
     private static void pause() {
         try {
-            Thread.sleep(10L);
+            Thread.sleep(25L);
         } catch (InterruptedException e) {
 
         }

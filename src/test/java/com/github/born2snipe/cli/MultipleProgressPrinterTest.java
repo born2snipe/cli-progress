@@ -35,8 +35,9 @@ public class MultipleProgressPrinterTest {
 
         printer.step();
         printer.println("message");
+        printer.step();
 
-        assertEquals("message\n1 of 100, 1%", mockPrintWriter.getOutput());
+        assertEquals("message     \n2 of 100, 2%", mockPrintWriter.getOutput());
     }
 
     @Test

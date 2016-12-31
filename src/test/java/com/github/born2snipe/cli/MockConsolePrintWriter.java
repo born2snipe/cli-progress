@@ -15,10 +15,13 @@ package com.github.born2snipe.cli;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.util.ArrayList;
 
 public class MockConsolePrintWriter extends PrintStream {
-    private String output = "";
+    private ArrayList<String> lines = new ArrayList<String>();
+    private String currentLine = "";
     private int numberLineEndings;
+    private int cursorLocation;
 
     public MockConsolePrintWriter() {
         super(new ByteArrayOutputStream());
@@ -27,14 +30,30 @@ public class MockConsolePrintWriter extends PrintStream {
     @Override
     public void print(String s) {
         for (char c : s.toCharArray()) {
-            switch (c) {
-                case '\b':
-                    output = output.substring(0, output.length() - 1);
-                    break;
-                case '\n':
-                    numberLineEndings++;
-                default:
-                    output += c;
+            if (isBackspace(c)) {
+                cursorLocation--;
+                if (cursorLocation < 0) {
+                    cursorLocation = 0;
+                }
+            } else if (isNewLine(c)) {
+                numberLineEndings++;
+                cursorLocation = 0;
+                lines.add(currentLine);
+                currentLine = "";
+            } else {
+                if (isCursorAtTheEndOfTheCurrentLine()) {
+                    currentLine += c;
+                } else {
+                    String starting = currentLine.substring(0, cursorLocation);
+                    String ending = "";
+                    if (currentLine.length() > 1) {
+                        ending = currentLine.substring(cursorLocation + 1);
+                    }
+
+                    currentLine = starting + c;
+                    currentLine += ending;
+                }
+                cursorLocation++;
             }
         }
     }
@@ -44,6 +63,31 @@ public class MockConsolePrintWriter extends PrintStream {
     }
 
     public String getOutput() {
+        String output = "";
+        for (String line : lines) {
+            output += line;
+            output += "\n";
+        }
+        output += currentLine;
         return output;
+    }
+
+    @Override
+    public String toString() {
+        return getOutput();
+    }
+
+    private boolean isCursorAtTheEndOfTheCurrentLine() {
+        return cursorLocation == currentLine.length()
+//                || cursorLocation == 0
+                ;
+    }
+
+    private boolean isNewLine(char c) {
+        return c == '\n';
+    }
+
+    private boolean isBackspace(char c) {
+        return c == '\b';
     }
 }

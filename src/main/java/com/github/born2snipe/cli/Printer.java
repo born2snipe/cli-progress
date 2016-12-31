@@ -24,7 +24,7 @@ public class Printer {
     }
 
     public synchronized void println(String text) {
-        print(text);
+        printStream.print(text);
         println();
     }
 
@@ -40,6 +40,8 @@ public class Printer {
 
     public synchronized void clear(int numberOfCharactersToRemove) {
         for (int i = 0; i < numberOfCharactersToRemove; i++) {
+            printStream.print("\b");
+            printStream.print(" ");
             printStream.print("\b");
             totalPrinted--;
         }
